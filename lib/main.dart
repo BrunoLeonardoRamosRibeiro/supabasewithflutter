@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:supabasewithflutter/email_password/email_password_sign_up_page.dart';
 import 'package:supabasewithflutter/google_sign_in/google_sign_in.dart';
 
 void main() async {
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const GoogleSignInPage(),
+      home: const EmailPasswordSignUpPage(),
     );
   }
 }

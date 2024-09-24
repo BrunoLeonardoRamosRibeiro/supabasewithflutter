@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class EmailPasswordSignUpPage extends StatefulWidget {
   const EmailPasswordSignUpPage({super.key});
@@ -19,24 +20,45 @@ class _EmailPasswordSignUpPageState extends State<EmailPasswordSignUpPage> {
       appBar: AppBar(
         title: Text(uId),
       ),
-      body: Column(
-        children: [
-          TextField(
-            controller: emailController,
-            decoration: const InputDecoration(
-              hintText: 'Enter email',
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            TextField(
+              controller: emailController,
+              decoration: const InputDecoration(
+                hintText: 'Enter Email',
+              ),
             ),
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          TextField(
-            controller: emailController,
-            decoration: const InputDecoration(
-              hintText: 'Enter email',
+            const SizedBox(
+              height: 8,
             ),
-          ),
-        ],
+            TextField(
+              controller: passwordController,
+              decoration: const InputDecoration(
+                hintText: 'Enter Password',
+              ),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                final result = await Supabase.instance.client.auth.signUp(
+                  email: emailController.text.trim(),
+                  password: passwordController.text.trim(),
+                );
+
+                setState(() {
+                  uId = result.user?.id ?? '';
+                });
+              },
+              child: const Text('Sign UP'),
+            ),
+          ],
+        ),
       ),
     );
   }
