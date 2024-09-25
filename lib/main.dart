@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:supabasewithflutter/email_password/email_password_sign_up_page.dart';
-import 'package:supabasewithflutter/google_sign_in/google_sign_in.dart';
+// import 'package:supabasewithflutter/email_password/email_password_sign_up_page.dart';
+// import 'package:supabasewithflutter/google_sign_in/google_sign_in.dart';
+import 'package:supabasewithflutter/todo/todo_home_screen.dart';
+
+final supabase = Supabase.instance.client;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,12 +22,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const EmailPasswordSignUpPage(),
+      home: const TodoHomeScreen(),
     );
   }
 }
