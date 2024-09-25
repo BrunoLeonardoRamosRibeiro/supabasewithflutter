@@ -38,6 +38,26 @@ class _TodoHomeScreenState extends State<TodoHomeScreen> {
                   child: ListTile(
                     title: Text(item['title']),
                     subtitle: Text(item['description']),
+                    trailing: SizedBox(
+                      width: 100,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                            onPressed: () async {
+                              await supabase.from('Todo').delete().match({
+                                'id': item['id'],
+                              });
+                              setState(() {});
+                            },
+                            icon: const Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 );
               },
