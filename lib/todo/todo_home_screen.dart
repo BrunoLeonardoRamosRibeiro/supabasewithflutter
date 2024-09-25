@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabasewithflutter/main.dart';
 import 'package:supabasewithflutter/todo/create_todo.dart';
 
 class TodoHomeScreen extends StatefulWidget {
@@ -15,6 +16,38 @@ class _TodoHomeScreenState extends State<TodoHomeScreen> {
       appBar: AppBar(
         title: const Text('To-do'),
         centerTitle: true,
+      ),
+      body: FutureBuilder<List<Map<String, dynamic>>>(
+        future: supabase.from('Todo').select(),
+        builder: (context, snap) {
+          if (snap.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snap.hasError) {
+            return const Center(
+              child: Text('Ocorreu um ero!'),
+            );
+          } else if (snap.hasData && snap.data != null) {
+            return ListView.builder(
+              itemCount: snap.data?.length ?? 0,
+              itemBuilder: (_, index) {
+                final item = snap.data![index];
+
+                return Card(
+                  child: ListTile(
+                    title: Text(item['title']),
+                    subtitle: Text(item['description']),
+                  ),
+                );
+              },
+            );
+          } else {
+            return const Center(
+              child: Text('Sem dados retornados'),
+            );
+          }
+        },
       ),
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
