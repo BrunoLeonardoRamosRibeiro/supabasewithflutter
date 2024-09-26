@@ -10,6 +10,9 @@ class TodoHomeScreen extends StatefulWidget {
 }
 
 class _TodoHomeScreenState extends State<TodoHomeScreen> {
+
+  final stream = supabase.from("Todo").stream(primaryKey: ['id']);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,8 +20,8 @@ class _TodoHomeScreenState extends State<TodoHomeScreen> {
         title: const Text('To-do'),
         centerTitle: true,
       ),
-      body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: supabase.from('Todo').select(),
+      body: StreamBuilder<List<Map<String, dynamic>>>(
+        stream: stream,
         builder: (context, snap) {
           if (snap.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -48,7 +51,7 @@ class _TodoHomeScreenState extends State<TodoHomeScreen> {
                               await supabase.from('Todo').delete().match({
                                 'id': item['id'],
                               });
-                              setState(() {});
+                              // setState(() {});
                             },
                             icon: const Icon(
                               Icons.delete,
@@ -65,9 +68,9 @@ class _TodoHomeScreenState extends State<TodoHomeScreen> {
                                   ),
                                 ),
                               );
-                              if (result == true) {
-                                setState(() {});
-                              }
+                              // if (result == true) {
+                              //   setState(() {});
+                              // }
                             },
                             icon: const Icon(
                               Icons.edit,
@@ -98,9 +101,9 @@ class _TodoHomeScreenState extends State<TodoHomeScreen> {
             ),
           );
 
-          if (result == true) {
-            setState(() {});
-          }
+          // if (result == true) {
+          //   setState(() {});
+          // }
         },
         child: const Icon(Icons.add),
       ),
