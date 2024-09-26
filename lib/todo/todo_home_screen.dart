@@ -55,6 +55,25 @@ class _TodoHomeScreenState extends State<TodoHomeScreen> {
                               color: Colors.red,
                             ),
                           ),
+                          IconButton(
+                            onPressed: () async {
+                              final result = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => CreateTodo(
+                                    todo: item,
+                                  ),
+                                ),
+                              );
+                              if (result == true) {
+                                setState(() {});
+                              }
+                            },
+                            icon: const Icon(
+                              Icons.edit,
+                              color: Colors.green,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -71,13 +90,17 @@ class _TodoHomeScreenState extends State<TodoHomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          final result = await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => const CreateTodo(),
             ),
           );
+
+          if (result == true) {
+            setState(() {});
+          }
         },
         child: const Icon(Icons.add),
       ),

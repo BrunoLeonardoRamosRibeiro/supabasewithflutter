@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:supabasewithflutter/main.dart';
 
 class CreateTodo extends StatefulWidget {
-  const CreateTodo({super.key});
+  final Map<String, dynamic>? todo;
+  const CreateTodo({
+    super.key,
+    this.todo,
+  });
 
   @override
   State<CreateTodo> createState() => _CreateTodoState();
@@ -13,10 +17,20 @@ class _CreateTodoState extends State<CreateTodo> {
   final descriptionController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+
+    if (widget.todo != null) {
+      titleController.text = widget.todo!['title'];
+      descriptionController.text = widget.todo!['description'];
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create To-do'),
+        title: Text(widget.todo != null ? 'Update To-do' : 'Create To-do'),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -44,15 +58,38 @@ class _CreateTodoState extends State<CreateTodo> {
             ),
             ElevatedButton(
               onPressed: () async {
-                final result = await supabase.from('Todo').insert({
-                  'title': titleController.text.trim(),
-                  'description': descriptionController.text.trim(),
-                }).select();
+                if (widget.todo != null) {
+                  final result = await supabase.from('Todo').update({
+                    'title': titleController.text.trim(),
+                    'description': descriptionController.text.trim(),
+                  }).match({
+                    'id': widget.todo!['id'],
+                  });
 
-                print('------- RESULTADO -------');
-                print(result.toString());
+                  print('------- RESULTADO -------');
+                  print(result.toString());
+
+                  if (mounted) {
+                    Navigator.pop(context, true);
+                  }
+                } else {
+                  try {
+                    final result = await supabase.from('Todo').insert({
+                      'title': titleController.text.trim(),
+                      'description': descriptionController.text.trim(),
+                    }).select();
+
+                    print('------- RESULTADO -------');
+                    print(result.toString());
+                    if (mounted) {
+                      Navigator.pop(context, true);
+                    }
+                  } catch (e) {
+                    print(e);
+                  }
+                }
               },
-              child: const Text('Create'),
+              child: Text(widget.todo != null ? 'Update' : 'Create'),
             ),
           ],
         ),
