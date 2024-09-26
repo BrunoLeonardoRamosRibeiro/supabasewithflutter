@@ -85,6 +85,7 @@ class _UploadImageState extends State<UploadImage> {
 
       setState(() {
         imageUrl = imageUrlResponse;
+        print(imageUrl);
       });
     } on StorageException catch (error) {
       if (mounted) {
